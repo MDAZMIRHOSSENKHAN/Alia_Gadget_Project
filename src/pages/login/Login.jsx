@@ -2,8 +2,9 @@ import { useForm } from "react-hook-form";
 import {useSignInWithGoogle} from "react-firebase-hooks/auth"
 import { FaGoogle } from "react-icons/fa";
 import auth from "../../../firebase.init";
+import { Link } from "react-router-dom";
 const Login = () => {
-  const [signInWithGoogle, user, loading, error] = useSignInWithGoogle(auth);
+  const [signInWithGoogle, user] = useSignInWithGoogle(auth);
   const {
     register,
     handleSubmit,
@@ -44,6 +45,7 @@ const Login = () => {
       <button onClick={handleGoogleSignIn} className="bg-blue-500 text-white w-1/2 mt-4 rounded p-2">
         <FaGoogle style={{ fontSize: "24px", margin: "auto" }} />
       </button>
+      <Link to="/sign-up" className="text-blue-600 block">Not and account? Sign Up here</Link>
     </div>
   );
 };
