@@ -1,14 +1,14 @@
 import { useForm } from "react-hook-form";
-import { useCreateUserWithEmailAndPassword, useUpdateProfile } from "react-firebase-hooks/auth";
+import { Link, useNavigate } from "react-router-dom";
+import { useCreateUserWithEmailAndPassword } from "react-firebase-hooks/auth";
 import auth from "../../../firebase.init";
 import Loading from "../../shared/Loading";
-import { Link, Navigate } from "react-router-dom";
 import toast from "react-hot-toast";
 
 const SignUp = () => {
   const [createUserWithEmailAndPassword, user, loading, error] =
     useCreateUserWithEmailAndPassword(auth);
-    const [updateProfile,] = useUpdateProfile(auth);
+    const navigate  = useNavigate()
   const {
     register,
     handleSubmit,
@@ -16,16 +16,14 @@ const SignUp = () => {
   } = useForm();
 
   const onSubmit = async (data) => {
+
     await createUserWithEmailAndPassword(data.email, data.password);
-    await updateProfile({displayName:data.name})
     console.log(user)
     if(user){
-      toast.success("User Created Successfully")
-      return <Navigate to="/login"/>;
+      toast.success("User Created Successfully");
+      return navigate("/");
     }
   };
-
-
 
   return (
     <div className="m-auto w-1/2 mt-10">
@@ -76,10 +74,12 @@ const SignUp = () => {
         )}
 
         {
-          error && <h2 className="text-center text-red-700 mt-4 text-xl">Something went wrong....!</h2>
+          error && <h1 className="text-red-700 text-center mt-5 text-2xl">Something went wrong....!</h1>
         }
 
-        <Link to="/login" className="text-blue-600">Already have an account? Login here</Link>
+        <Link to="/login" className="text-blue-600">
+          Already have an account? Login here
+        </Link>
       </form>
     </div>
   );
