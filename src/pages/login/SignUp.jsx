@@ -1,6 +1,9 @@
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
-import { useCreateUserWithEmailAndPassword } from "react-firebase-hooks/auth";
+import {
+  useCreateUserWithEmailAndPassword,
+  useUpdateProfile,
+} from "react-firebase-hooks/auth";
 import auth from "../../../firebase.init";
 import Loading from "../../shared/Loading";
 import toast from "react-hot-toast";
@@ -8,7 +11,8 @@ import toast from "react-hot-toast";
 const SignUp = () => {
   const [createUserWithEmailAndPassword, user, loading, error] =
     useCreateUserWithEmailAndPassword(auth);
-    const navigate  = useNavigate()
+  const [updateProfile, updating] = useUpdateProfile(auth);
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -16,14 +20,15 @@ const SignUp = () => {
   } = useForm();
 
   const onSubmit = async (data) => {
-
     await createUserWithEmailAndPassword(data.email, data.password);
-    console.log(user)
-    if(user){
-      toast.success("User Created Successfully");
-      return navigate("/");
-    }
+    await updateProfile({ displayName: data.name });
   };
+  console.log(user);
+
+  if (user?.user?.accessToken) {
+    toast.success("Congratulations!!! User created Successfully.");
+    navigate("/products/all");
+  }
 
   return (
     <div className="m-auto w-1/2 mt-10">
@@ -36,6 +41,15 @@ const SignUp = () => {
             defaultValue=""
             {...register("name")}
             placeholder="your name"
+          />
+        </div>
+        <div className="mb-4">
+          <label className="block">Phone</label>
+          <input
+            className="input input-bordered input-info w-full max-w-xs "
+            defaultValue=""
+            {...register("phoneNumber")}
+            placeholder="your phone number"
           />
         </div>
 
@@ -64,7 +78,7 @@ const SignUp = () => {
           <span className="text-red-600">Password is required</span>
         )}
 
-        {loading ? (
+        {loading || updating ? (
           <Loading />
         ) : (
           <input
@@ -73,13 +87,15 @@ const SignUp = () => {
           />
         )}
 
-        {
-          error && <h1 className="text-red-700 text-center mt-5 text-2xl">Something went wrong....!</h1>
-        }
-
         <Link to="/login" className="text-blue-600">
           Already have an account? Login here
         </Link>
+
+        {error && (
+          <h1 className="text-red-700 text-center mt-6 text-2xl font-semibold">
+            {error.message}
+          </h1>
+        )}
       </form>
     </div>
   );

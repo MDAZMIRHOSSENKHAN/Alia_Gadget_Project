@@ -1,7 +1,11 @@
 import { Link } from "react-router-dom";
 import logo from "../assets/logo/primary-logo-removebg-preview.png";
+import { useAuthState, useSignOut } from "react-firebase-hooks/auth";
+import auth from "../../firebase.init";
 
 const Header = () => {
+  const [user] = useAuthState(auth);
+  const [signOut] = useSignOut(auth);
   return (
     <div className="navbar bg-base-100">
       <div className="navbar-start">
@@ -27,22 +31,22 @@ const Header = () => {
             className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52"
           >
             <li>
-              <a>Item 1</a>
+              <Link to="/products/all">All Products</Link>
             </li>
-            <li>
-              <a>Parent</a>
-              <ul className="p-2">
+            {user ? (
+              <>
+                <button className="btn inline" onClick={signOut}>Logout</button>
+              </>
+            ) : (
+              <>
                 <li>
-                  <a>Submenu 1</a>
+                  <Link to="/sign-up"> Sign Up</Link>
                 </li>
                 <li>
-                  <a>Submenu 2</a>
+                  <Link to="/login">Login</Link>
                 </li>
-              </ul>
-            </li>
-            <li>
-              <a>Item 3</a>
-            </li>
+              </>
+            )}
           </ul>
         </div>
         <Link to="/">
@@ -55,30 +59,35 @@ const Header = () => {
           <li>
             <Link to="/products/all">All Products</Link>
           </li>
-          <li>
-            <details>
-              <summary>Parent</summary>
-              <ul className="p-2">
-                <li>
-                  <a>Submenu 1</a>
-                </li>
-                <li>
-                  <a>Submenu 2</a>
-                </li>
-              </ul>
-            </details>
-          </li>
-          <li>
-            <Link to="/sign-up"> Sign Up</Link>
-          </li>
-          <li>
-            <Link to="/login">Login</Link>
-          </li>
+          {user ? (
+            <button className="btn" onClick={signOut}>Logout</button>
+          ) : (
+            <>
+              <li>
+                <Link to="/sign-up"> Sign Up</Link>
+              </li>
+              <li>
+                <Link to="/login">Login</Link>
+              </li>
+            </>
+          )}
         </ul>
       </div>
-      <div className="navbar-end">
-        <a className="btn">Button</a>
-      </div>
+      {user?.displayName && (
+        <div className="navbar-end">
+          <h2 className="bg-purple-600 text-md text-white p-2 rounded ">
+            Welcome {user?.displayName}
+          </h2>
+        </div>
+      )}
+
+      {user?.photoURL && (
+        <div className="avatar">
+          <div className="w-24 rounded-full">
+            <img src={user?.photoURL} />
+          </div>
+        </div>
+      )}
     </div>
   );
 };
