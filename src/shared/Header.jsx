@@ -2,6 +2,8 @@ import { Link } from "react-router-dom";
 import logo from "../assets/logo/primary-logo-removebg-preview.png";
 import { useAuthState, useSignOut } from "react-firebase-hooks/auth";
 import auth from "../../firebase.init";
+import { FaCartPlus } from "react-icons/fa";
+
 
 const Header = () => {
   const [user] = useAuthState(auth);
@@ -47,6 +49,13 @@ const Header = () => {
                 </li>
               </>
             )}
+
+            <li>
+            <label htmlFor="cart-drawer" className="drawer-button btn btn-primary">
+           <FaCartPlus />
+
+          </label>
+          </li>
           </ul>
         </div>
         <Link to="/">
@@ -71,6 +80,10 @@ const Header = () => {
               </li>
             </>
           )}
+          <label htmlFor="cart-drawer" className="drawer-button btn btn-primary">
+         <FaCartPlus />
+
+        </label>
         </ul>
       </div>
       {user?.displayName && (
