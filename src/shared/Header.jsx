@@ -4,7 +4,6 @@ import { useAuthState, useSignOut } from "react-firebase-hooks/auth";
 import auth from "../../firebase.init";
 import { FaCartPlus } from "react-icons/fa";
 
-
 const Header = () => {
   const [user] = useAuthState(auth);
   const [signOut] = useSignOut(auth);
@@ -35,9 +34,15 @@ const Header = () => {
             <li>
               <Link to="/products/all">All Products</Link>
             </li>
+            <li>
+              <Link to="/checkout">Checkout</Link>
+            </li>
+
             {user ? (
               <>
-                <button className="btn inline" onClick={signOut}>Logout</button>
+                <button className="btn inline" onClick={signOut}>
+                  Logout
+                </button>
               </>
             ) : (
               <>
@@ -51,11 +56,13 @@ const Header = () => {
             )}
 
             <li>
-            <label htmlFor="cart-drawer" className="drawer-button btn btn-primary">
-           <FaCartPlus />
-
-          </label>
-          </li>
+              <label
+                htmlFor="cart-drawer"
+                className="drawer-button btn btn-primary"
+              >
+                <FaCartPlus />
+              </label>
+            </li>
           </ul>
         </div>
         <Link to="/">
@@ -68,8 +75,13 @@ const Header = () => {
           <li>
             <Link to="/products/all">All Products</Link>
           </li>
+          <li>
+          <Link to="/checkout">Checkout</Link>
+        </li>
           {user ? (
-            <button className="btn" onClick={signOut}>Logout</button>
+            <button className="btn" onClick={signOut}>
+              Logout
+            </button>
           ) : (
             <>
               <li>
@@ -80,10 +92,12 @@ const Header = () => {
               </li>
             </>
           )}
-          <label htmlFor="cart-drawer" className="drawer-button btn btn-primary">
-         <FaCartPlus />
-
-        </label>
+          <label
+            htmlFor="cart-drawer"
+            className="drawer-button btn btn-primary"
+          >
+            <FaCartPlus />
+          </label>
         </ul>
       </div>
       {user?.displayName && (

@@ -5,6 +5,8 @@ import NotFound from "../pages/static/NotFound";
 import AllProducts from "../pages/products/AllProducts";
 import SignUp from "../pages/login/SignUp";
 import Login from "../pages/login/Login";
+import Checkout from "../pages/checkout/Checkout";
+import PrivateRoute from "./PrivateRoute";
 
 const MainRoutes = createBrowserRouter([
   {
@@ -20,9 +22,17 @@ const MainRoutes = createBrowserRouter([
         element: <HomePage />,
       },
       {
-        path:"/products/all",
-        element:<AllProducts/>
-      }
+        path: "/products/all",
+        element: <AllProducts />,
+      },
+      {
+        path: "/checkout",
+        element: (
+          <PrivateRoute>
+            <Checkout />
+          </PrivateRoute>
+        ),
+      },
     ],
   },
   {
@@ -30,13 +40,13 @@ const MainRoutes = createBrowserRouter([
     element: <NotFound />,
   },
   {
-    path:"/sign-up",
-    element:<SignUp/>
+    path: "/sign-up",
+    element: <SignUp />,
   },
   {
-    path:"/login",
-    element:<Login/>
-  }
+    path: "/login",
+    element: <Login />,
+  },
 ]);
 
 export default MainRoutes;
